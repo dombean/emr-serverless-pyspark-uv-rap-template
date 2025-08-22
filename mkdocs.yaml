@@ -1,0 +1,51 @@
+site_name: emr-serverless-pyspark-uv-rap-template Documentation
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - content.code.copy
+  language: en
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: black
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: black
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+
+repo_name: emr-serverless-pyspark-uv-rap-template
+repo_url: https://github.com/dombean/emr-serverless-pyspark-uv-rap-template
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            show_signature_annotations: True
+            show_source: False
+            merge_init_into_class: True
+
+nav:
+  - Home: index.md
+  - API Reference: api_reference.md
+  - Guides:
+    - Terraform Guide: terraform_guide.md
+    - EMR Serverless Guide: emr_serverless_guide.md
+    - Business Config Workflow: business_config_workflow.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/dombean/emr-serverless-pyspark-uv-rap-template

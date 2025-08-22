@@ -1,0 +1,32 @@
+[project]
+name = "emr-serverless-pyspark-uv-rap-template"
+version = "0.0.0"
+description = "Minimal uv-managed PySpark package with EMR Serverless deploy CLI."
+readme = "README.md"
+requires-python = ">=3.9,<3.12"
+authors = [{ name = "Your Name", email = "you@example.com" }]
+
+dependencies = [
+    "click>=8.1.7",
+    "python-dotenv>=1.0.1",
+    "rdsa-utils>=0.14.1",
+    "tomli>=2.2.1",
+]
+
+[project.optional-dependencies]
+dev = ["pyspark~=3.5.1", "pre-commit", "black", "ruff", "isort", "pytest"]
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.0.0",
+    "mkdocstrings[python]>=0.24.0",
+]
+
+[project.scripts]
+deploy-to-emr = "emr_dummy.emr.deploy_cli:deploy"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = ["boto3>=1.40.6"]
