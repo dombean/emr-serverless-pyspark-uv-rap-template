@@ -16,7 +16,7 @@ The main command-line interface for deploying the application.
 
 Core functions for packaging, uploading, and submitting EMR Serverless jobs.
 
-::: emr_dummy.emr.deployer
+::: emr_dummy.emr.emr_serverless_utils
 
 ---
 
@@ -32,4 +32,4 @@ The main PySpark job logic.
 
 Utilities for loading TOML configuration files from S3.
 
-::: emr_dummy.emr.---
+::: emr_dummy.s3_utils
