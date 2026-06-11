@@ -309,3 +309,16 @@ $RECYCLE.BIN/
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 .emr_build/
 .emr_app_id
+
+# Custom rules: keep the EMR image to runtime code only.
+# The Dockerfile's `COPY . .` would otherwise ship all of these.
+.git/
+.github/
+terraform/
+docs/
+tests/
+site/
+mkdocs.yaml
+.pre-commit-config.yaml
+README.md
+LICENSE
