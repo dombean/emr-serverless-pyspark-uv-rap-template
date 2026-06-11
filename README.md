@@ -24,6 +24,29 @@ integration, see the [**EMR Serverless, CloudWatch & Iceberg Setup Guide**](http
 
 ---
 
+## 🐛 Live Remote Debugging & 📓 EMR Studio (Optional)
+
+Two optional capabilities, both off by default and enabled with a Terraform flag:
+
+  - **Live remote debugging** -- set breakpoints in PyCharm or VS Code and step
+    through the Spark driver running on EMR Serverless, via a reverse SSH tunnel
+    through an SSM bastion
+    (`terraform apply -var enable_remote_debugging=true`, then
+    `uv run deploy-to-emr --package --submit --debug`). See the
+    [**Remote Debugging Guide**](https://github.com/dombean/emr-serverless-pyspark-uv-rap-template/blob/main/docs/remote_debugging_guide.md).
+  - **EMR Studio** -- the web-based notebook IDE for interactive development,
+    provisioned with everything it needs (VPC, security groups, service role)
+    via `terraform apply -var enable_emr_studio=true`. Set
+    `EMR_STUDIO_ENABLED=true` before `--create-app` so the application accepts
+    notebook sessions. See the
+    [**Terraform Guide**](https://github.com/dombean/emr-serverless-pyspark-uv-rap-template/blob/main/docs/terraform_guide.md)
+    for setup, costs, and required user permissions.
+
+Both share one VPC and NAT gateway (~$0.05/hour while enabled) -- flip the flags
+back to `false` when idle.
+
+---
+
 ## 📺 Recommended Tutorial
 
 If you're new to **EMR Serverless**, check out this helpful YouTube tutorial:

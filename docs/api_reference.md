@@ -28,6 +28,15 @@ The main PySpark job logic.
 
 ---
 
+### Remote Debugging Hook 🐛
+
+Attaches the Spark driver to a remote debugger (PyCharm or VS Code) through the
+bastion's reverse SSH tunnel. See the Remote Debugging Guide.
+
+::: emr_dummy.debugging
+
+---
+
 ### S3 Configuration Loader 📄
 
 Utilities for loading TOML configuration files from S3.

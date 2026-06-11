@@ -16,6 +16,9 @@ configuration and deployment.
   guide to provisioning your AWS infrastructure using Terraform.
 - **[EMR Serverless Guide](emr_serverless_guide.md) ⚙️:** A complete guide to setting
   up the necessary IAM roles and AWS resources for EMR Serverless.
+- **[Remote Debugging Guide](remote_debugging_guide.md) 🐛:** Set breakpoints in
+  PyCharm or VS Code and step through a live PySpark driver on EMR Serverless via
+  a reverse SSH tunnel.
 - **[Business Config Workflow](business_config_workflow.md) 🗂️:** Best practices for
   managing your application's configuration in a versioned and auditable way.
 
@@ -30,3 +33,8 @@ configuration and deployment.
     auditability.
 -   **Apache Iceberg Ready:** Includes a sample job that writes to an Apache Iceberg
     table using the AWS Glue Catalog.
+-   **Live Remote Debugging:** Optional Terraform stack (VPC, NAT, SSM bastion) that
+    lets you attach PyCharm or VS Code to a running Spark driver
+    (`enable_remote_debugging`).
+-   **EMR Studio (Optional):** One flag (`enable_emr_studio`) provisions the
+    web-based notebook IDE, including its VPC, security groups, and service role.

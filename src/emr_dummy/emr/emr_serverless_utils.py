@@ -1,5 +1,7 @@
 """Utilities for packaging, uploading, and submitting EMR Serverless Spark jobs."""
 
+from __future__ import annotations
+
 import datetime
 import json
 import logging
@@ -99,6 +101,9 @@ def create_or_update_emr_app(
     image_uri: str,
     release_label: str,
     region: str,
+    subnet_ids: list[str] | None = None,
+    security_group_ids: list[str] | None = None,
+    studio_enabled: bool = False,
 ) -> str:
     """Create or update an EMR Serverless application.
 
@@ -112,11 +117,27 @@ def create_or_update_emr_app(
         The EMR release label (e.g., "emr-7.9.0").
     region
         The AWS region in which to create or update the application.
+    subnet_ids
+        Private subnet IDs to attach the application to a VPC (required for
+        remote debugging so the driver can reach the bastion). Must be
+        provided together with ``security_group_ids``.
+    security_group_ids
+        Security group IDs for the application's worker ENIs.
+    studio_enabled
+        Enable interactive endpoints so the application can run notebooks
+        from EMR Studio.
 
     Returns
     -------
     str
         The application ID of the created or existing EMR Serverless application.
+
+    Notes
+    -----
+    If the application already exists and network or interactive
+    configuration is provided, the function attempts to update it in place.
+    EMR Serverless only allows updates while the application is in the
+    CREATED or STOPPED state.
 
     Examples
     --------
@@ -129,6 +150,15 @@ def create_or_update_emr_app(
     >>> print(app_id)
     '00f1abcd1234efgh'
     """
+    extra_config: dict = {}
+    if subnet_ids and security_group_ids:
+        extra_config["networkConfiguration"] = {
+            "subnetIds": subnet_ids,
+            "securityGroupIds": security_group_ids,
+        }
+    if studio_enabled:
+        extra_config["interactiveConfiguration"] = {"studioEnabled": True}
+
     emr_client = boto3.client("emr-serverless", region_name=region)
     try:
         response = emr_client.list_applications(
@@ -137,8 +167,27 @@ def create_or_update_emr_app(
         app = next((a for a in response["applications"] if a["name"] == app_name), None)
         if app:
             logger.info(f"Found existing application: {app['id']}")
+            if extra_config:
+                try:
+                    emr_client.update_application(
+                        applicationId=app["id"],
+                        **extra_config,
+                    )
+                    logger.info(
+                        f"Updated configuration for {app['id']}: {extra_config}",
+                    )
+                except ClientError as err:
+                    if err.response["Error"]["Code"] == "ValidationException":
+                        logger.warning(
+                            f"Could not update configuration for "
+                            f"{app['id']}: {err}. Stop the application first "
+                            f"(it must be in CREATED or STOPPED state), then "
+                            f"re-run with --create-app.",
+                        )
+                    else:
+                        raise
             return app["id"]
-    except Exception as e:
+    except ClientError as e:
         logger.warning(f"Could not list applications: {e}")
 
     logger.info(f"Creating application {app_name} with image {image_uri}")
@@ -147,6 +196,7 @@ def create_or_update_emr_app(
         type="SPARK",
         releaseLabel=release_label,
         imageConfiguration={"imageUri": image_uri},
+        **extra_config,
     )
     return response["applicationId"]
 

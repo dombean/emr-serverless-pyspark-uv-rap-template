@@ -15,6 +15,9 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pyspark~=3.5.1", "pre-commit", "black", "ruff", "isort", "pytest"]
+# Remote debugging agents baked into the EMR image. Inert unless DEBUG_HOST
+# is set at job submission. Pin pydevd-pycharm to your PyCharm build version.
+debug = ["pydevd-pycharm", "debugpy>=1.8"]
 docs = [
     "mkdocs>=1.5.0",
     "mkdocs-material>=9.0.0",

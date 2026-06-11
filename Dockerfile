@@ -35,7 +35,9 @@ RUN pip3 install uv
 COPY pyproject.toml uv.lock ./
 
 # First, compile a requirements.txt file from your project dependencies.
-RUN uv pip compile pyproject.toml --output-file requirements.txt
+# The "debug" extra bakes in the remote-debugging agents (pydevd-pycharm,
+# debugpy); they are inert unless DEBUG_HOST is set at job submission.
+RUN uv pip compile pyproject.toml --extra debug --output-file requirements.txt
 
 # Now, install the dependencies from the generated requirements.txt file.
 RUN uv pip install --system -r requirements.txt

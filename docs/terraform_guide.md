@@ -1,12 +1,37 @@
-> ⚠️ **Warning: Manual EMR Studio Creation Required**
+> ℹ️ **EMR Studio is optional and off by default**
 >
-> This Terraform script provisions the necessary backend infrastructure for your
-> EMR Serverless jobs (S3 buckets, IAM roles, etc.). However, it **does not** create
-> the EMR Serverless Studio, which is the interactive web-based IDE for development.
+> By default, this Terraform script provisions only the backend infrastructure
+> for your EMR Serverless jobs (S3 buckets, ECR, Glue, IAM roles). To also
+> create the EMR Studio -- the interactive web-based notebook IDE -- enable it
+> with a flag:
 >
-> After you successfully run terraform apply, you must **create** the EMR Studio
-> manually using the AWS Console (web UI). You can follow the official
-> [**AWS tutorial to create an EMR Studio**](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-studio-create-studio.html).
+> ```bash
+> terraform apply -var enable_emr_studio=true
+> ```
+>
+> This provisions the Studio together with everything it needs (the VPC,
+> private subnets, NAT gateway, security groups, and service role), using IAM
+> auth mode so no IAM Identity Center setup is required. Open it via the
+> `EMR_STUDIO_URL` output.
+>
+> To run notebooks against your EMR Serverless application, the application
+> must expose interactive endpoints: set `EMR_STUDIO_ENABLED=true` in `.env`
+> before running `deploy-to-emr --create-app`. If the application already
+> exists, stop it first (updates require the CREATED or STOPPED state).
+>
+> **Costs and caveats:**
+>
+> - The Studio itself is free, but it shares its VPC with the remote-debugging
+>   stack (see the Remote Debugging Guide), and the NAT gateway in that VPC
+>   runs at roughly $0.05/hour plus data charges. Set the flag back to `false`
+>   when not in use.
+> - To attach a notebook to your application inside the Studio, you select the
+>   application plus a **runtime role** -- your existing `EMR_EXECUTION_ROLE`
+>   works for that. However, the IAM user/role *opening* the Studio needs its
+>   own permissions: `elasticmapreduce:*Studio*`-style actions to access the
+>   Studio and its workspaces, `emr-serverless:AccessInteractiveEndpoints` on
+>   the application, and `iam:PassRole` on the runtime role. See the
+>   [AWS user-permissions documentation for EMR Studio](https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-studio-user-permissions.html).
 
 # 🏗️ Infrastructure Setup with Terraform
 
@@ -18,7 +43,7 @@ the S3 bucket, ECR repository, and all the required IAM roles and permissions.
 
 ### Understanding the Terraform Files
 
-The infrastructure is defined across three main files in the `terraform/` directory.
+The infrastructure is defined across five files in the `terraform/` directory.
 Here’s a breakdown of what each file does:
 
   - **`variables.tf`**: This file is where you define the input variables for your
@@ -39,11 +64,25 @@ Here’s a breakdown of what each file does:
       - The IAM roles and policies needed for EMR Serverless to access these resources.
 
 
+  - **`debugging.tf`**: Defines the **optional** remote-debugging stack
+  (gated behind `enable_remote_debugging`, off by default): a VPC with private
+  subnets and a NAT gateway, plus an SSM-accessed bastion that relays your IDE's
+  debug connection to the Spark driver. See the
+  [Remote Debugging Guide](remote_debugging_guide.md). The VPC is shared with
+  EMR Studio.
+
+  - **`studio.tf`**: Defines the **optional** EMR Studio (gated behind
+  `enable_emr_studio`, off by default): the Studio itself (IAM auth mode), its
+  workspace/engine security groups, and its service role. See the note at the
+  top of this page.
+
   - **`outputs.tf`**: This file declares the output values that you want to be easily
   accessible after Terraform has created the infrastructure. When you run
   `terraform apply`, the values of the outputs defined in this file will be printed
   to your console. This is particularly useful for getting the ARNs and names of
   the resources you've just created, which you'll need for your `.env` file.
+  Outputs for the optional features (e.g. `DEBUG_HOST`, `EMR_STUDIO_URL`) are
+  `null` until the corresponding flag is enabled.
 
 ---
 
