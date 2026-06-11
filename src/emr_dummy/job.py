@@ -6,6 +6,7 @@ import os
 from importlib import resources as ir
 from typing import Any, Dict, Tuple
 
+import boto3
 import pyspark.sql.functions as F
 import tomli as _toml
 from pyspark.sql import SparkSession
@@ -161,7 +162,8 @@ def _load_config(args: argparse.Namespace) -> Dict[str, Any]:
     # packaged config.toml
     uri = args.config_s3 or os.getenv("CONFIG_S3_URI")
     if uri:
-        cfg, meta = read_toml_from_s3(uri)
+        client = boto3.client("s3")
+        cfg, meta = read_toml_from_s3(client, uri)
         logger.info(
             f"Loaded config from S3: {uri} (sha256={meta.get('sha256')}, "
             f"etag={meta.get('etag')}, version={meta.get('version_id')})",
