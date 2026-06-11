@@ -50,3 +50,6 @@ repos:
         entry: These file extensions are restricted. Data should be removed from the commit
         language: fail
         files: .*\.(csv|feather|xlsx|zip|hdf5|h5|txt|json|xml|hd|parquet)
+        # Editor configuration is not data; the remote debugging guide
+        # recommends committing .vscode/launch.json.
+        exclude: ^\.vscode/
