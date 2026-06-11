@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         exclude: |
@@ -18,26 +18,28 @@ repos:
       - id: check-yaml
       - id: check-toml
       - id: debug-statements
+        # The remote-debugging hook imports debugger modules by design.
+        exclude: ^src/emr_dummy/debugging\.py$
 
   - repo: https://github.com/psf/black
-    rev: 24.4.2 # Using a more recent version
+    rev: 26.5.1 # Using a more recent version
     hooks:
       - id: black
 
   - repo: https://github.com/PyCQA/isort
-    rev: 5.13.2
+    rev: 8.0.1
     hooks:
       - id: isort
         args: ["--profile", "black"]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.4 # Using a more recent version
+    rev: v0.15.17 # Using a more recent version
     hooks:
       - id: ruff
         args: ["--config", ".ruff.toml"]
 
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.18.2 # Using a more recent version
+    rev: v8.30.0 # Using a more recent version
     hooks:
       - id: gitleaks
 
