@@ -41,3 +41,21 @@ jobs:
 
       - name: Run tests
         run: uv run pytest
+
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Check formatting
+        run: terraform -chdir=terraform fmt -check -diff
+
+      - name: Initialise (no backend)
+        run: terraform -chdir=terraform init -backend=false -input=false
+
+      - name: Validate
+        run: terraform -chdir=terraform validate
