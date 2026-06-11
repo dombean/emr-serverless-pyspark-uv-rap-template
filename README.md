@@ -134,9 +134,9 @@ flowchart TD
 
 **Related Sections In This README:**
 
-  - [Dry-Run Mode](https://www.google.com/search?q=%23-dry-run-mode)
-  - [Deploy to EMR Serverless](https://www.google.com/search?q=%23-deploy-to-emr-serverless)
-  - [Notes](https://www.google.com/search?q=%23-notes)
+  - [Dry-Run Mode](#-dry-run-mode)
+  - [Deploy to EMR Serverless](#-deploy-to-emr-serverless)
+  - [Notes](#-notes)
 
 ---
 
@@ -352,15 +352,23 @@ uv run deploy-to-emr --dry-run
 {
   "applicationId": "00fulej7qh7jt90t",
   "executionRoleArn": "arn:aws:iam::<your-aws-account-id>:role/YourEmrServerlessExecutionRole",
-  "executionTimeoutMinutes": 60,
   "jobDriver": {
     "sparkSubmit": {
-      "entryPoint": "s3://my-bucket/emr-code/emr_pyspark_dummy/dev/releases/20250808_123456-ab12cd34/main_ab12cd34.py",
+      "entryPoint": "s3://my-bucket/emr-code/my_pipeline/dev/releases/20250808_123456-ab12cd34/main.py",
       "entryPointArguments": [],
-      "sparkSubmitParameters": "--py-files s3://my-bucket/emr-code/emr_pyspark_dummy/dev/releases/20250808_123456-ab12cd34/code_ab12cd34.zip"
+      "sparkSubmitParameters": "--py-files s3://my-bucket/emr-code/my_pipeline/dev/releases/20250808_123456-ab12cd34/code.zip --conf spark.sql.catalog.glue_catalog=org.apache.iceberg.spark.SparkCatalog --conf spark.sql.catalog.glue_catalog.catalog-impl=org.apache.iceberg.aws.glue.GlueCatalog --conf spark.sql.catalog.glue_catalog.warehouse=s3://your-data-bucket/iceberg/warehouse"
     }
   },
-  "configurationOverrides": {}
+  "configurationOverrides": {
+    "monitoringConfiguration": {
+      "s3MonitoringConfiguration": {
+        "logUri": "s3://my-bucket/emr-code/my_pipeline/dev/logs/20250808_123456-ab12cd34/"
+      },
+      "cloudWatchLoggingConfiguration": {
+        "enabled": true
+      }
+    }
+  }
 }
 ```
 
