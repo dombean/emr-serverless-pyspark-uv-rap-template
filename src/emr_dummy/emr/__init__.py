@@ -1,6 +1,1 @@
-"""Dummy test module to satisfy CI workflows."""
-
-
-def test_always_passes():
-    """A simple test that always passes."""
-    assert True
+"""EMR Serverless deployment helpers: packaging, app management, job submission."""
