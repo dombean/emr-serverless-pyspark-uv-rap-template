@@ -106,7 +106,8 @@ environment and the speed of a simple file upload for your code.
 
 ## 🛠 Prerequisites
 
-- 🐍 **Python 3.10** (required for EMR 6.x + PySpark 3.5 compatibility)
+- 🐍 **Python 3.9–3.11** (matches `requires-python` in `pyproject.toml`; the
+  EMR 7.9 base image itself runs Python 3.9)
 - 📦 `uv` installed (e.g. `brew install uv`)
 - 🔑 AWS CLI with credentials configured (`aws configure` or `aws sso login`)
 - ☁️ An **EMR Serverless** application created in AWS
