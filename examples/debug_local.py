@@ -37,7 +37,7 @@ from emr_dummy.job import run
 
 logger = logging.getLogger(__name__)
 
-load_dotenv()
+load_dotenv(override=True)  # .env wins over any stale shell vars
 
 
 def configure_iceberg_from_env(spark: SparkSession) -> bool:

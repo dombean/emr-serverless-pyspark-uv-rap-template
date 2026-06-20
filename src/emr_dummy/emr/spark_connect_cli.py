@@ -33,7 +33,7 @@ from emr_dummy.emr.spark_connect import (
 
 logger = logging.getLogger(__name__)
 
-load_dotenv()
+load_dotenv(override=True)  # .env wins over any stale shell vars
 
 
 @click.group()

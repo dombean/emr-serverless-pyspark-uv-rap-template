@@ -205,10 +205,10 @@ Issues hit while setting this up, with fixes:
   `EMR_EXECUTION_ROLE`, and `EMR_APP_ID`. Copy `.env.example` to `.env` and
   fill it in from `terraform output`.
 
-- **You edit `.env` but nothing changes.** `load_dotenv()` does **not**
-  override variables already set in your shell -- a stale `export FOO=...`
-  shadows the `.env` value. Find it with `echo $FOO` and `unset FOO`, or fix
-  the exported value.
+- **Which value wins, `.env` or the shell?** The CLIs call
+  `load_dotenv(override=True)`, so `.env` takes precedence over variables
+  already exported in your shell. Edit `.env` and it is authoritative; if you
+  prefer a one-off shell override, comment the line out of `.env` first.
 
 - **`ValidationException ... imageConfiguration.imageUri failed to satisfy
   ... pattern`.** The image URI is missing its tag. EMR requires

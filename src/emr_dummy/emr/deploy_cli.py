@@ -29,7 +29,7 @@ from emr_dummy.s3_utils import upload_file_to_s3_key, upload_json
 
 logger = logging.getLogger(__name__)
 
-load_dotenv()  # Load .env if present
+load_dotenv(override=True)  # Load .env if present; .env wins over shell vars
 
 
 @click.command()
