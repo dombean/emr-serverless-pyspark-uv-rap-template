@@ -2,13 +2,13 @@
 
 Subcommands:
 
-- ``start``  : start a session and print the connection URL / ``SPARK_REMOTE``
-- ``shell``  : start a session and drop into a Python REPL with ``spark`` bound
-- ``list``   : list sessions on the application
-- ``stop``   : terminate a session
+- `start`  : start a session and print the connection URL / `SPARK_REMOTE`
+- `shell`  : start a session and drop into a Python REPL with `spark` bound
+- `list`   : list sessions on the application
+- `stop`   : terminate a session
 
-All commands read ``REGION``, ``EMR_APP_ID``, and ``EMR_EXECUTION_ROLE`` from
-the environment (or a ``.env`` file), matching the deploy CLI.
+All commands read `REGION`, `EMR_APP_ID`, and `EMR_EXECUTION_ROLE` from
+the environment (or a `.env` file), matching the deploy CLI.
 """
 
 from __future__ import annotations
@@ -52,9 +52,9 @@ def start(timeout: int) -> None:
     """Start a session and print its connection URL.
 
     The session keeps running after this command exits (until its idle
-    timeout or an explicit ``stop``), so you can paste the URL into a
-    notebook or IDE. Export ``SPARK_REMOTE`` and any
-    ``SparkSession.builder.getOrCreate()`` (or the ``pyspark`` shell) will
+    timeout or an explicit `stop`), so you can paste the URL into a
+    notebook or IDE. Export `SPARK_REMOTE` and any
+    `SparkSession.builder.getOrCreate()` (or the `pyspark` shell) will
     connect automatically.
 
     Parameters
@@ -86,7 +86,7 @@ def start(timeout: int) -> None:
     help="Seconds to wait for the session to become ready.",
 )
 def shell(timeout: int) -> None:
-    """Start a session and open a Python REPL with ``spark`` connected.
+    """Start a session and open a Python REPL with `spark` connected.
 
     The session is terminated automatically when you exit the REPL.
 

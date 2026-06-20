@@ -5,11 +5,11 @@ to a Spark driver running on EMR Serverless over a gRPC/TLS endpoint. Your
 DataFrame and SQL code runs locally as the client and is executed remotely --
 so you debug with ordinary local breakpoints, with no VPC, bastion, or tunnel.
 
-The flow is: ``StartSession`` -> poll ``GetSession`` until ready ->
-``GetSessionEndpoint`` for the URL and auth token -> connect a
-``SparkSession`` to the ``sc://`` URL. Sessions cost money until terminated or
-idle-timed-out, so always ``TerminateSession`` when finished (use
-``session_scope`` to do this automatically).
+The flow is: `StartSession` -> poll `GetSession` until ready ->
+`GetSessionEndpoint` for the URL and auth token -> connect a
+`SparkSession` to the `sc://` URL. Sessions cost money until terminated or
+idle-timed-out, so always `TerminateSession` when finished (use
+`session_scope` to do this automatically).
 """
 
 from __future__ import annotations
@@ -33,25 +33,25 @@ FAILED_STATES = ("FAILED", "TERMINATED")
 
 
 def build_connect_url(endpoint: str, auth_token: str) -> str:
-    """Build a Spark Connect ``sc://`` URL from an endpoint and auth token.
+    """Build a Spark Connect `sc://` URL from an endpoint and auth token.
 
-    ``GetSessionEndpoint`` returns an HTTPS URL without a port. The PySpark
+    `GetSessionEndpoint` returns an HTTPS URL without a port. The PySpark
     client defaults to port 15002 (not reachable on EMR Serverless), so the
     port must be pinned to 443.
 
     Parameters
     ----------
     endpoint
-        The endpoint URL returned by ``GetSessionEndpoint`` (e.g.
-        ``https://hostname``).
+        The endpoint URL returned by `GetSessionEndpoint` (e.g.
+        `https://hostname`).
     auth_token
-        The session authentication token from ``GetSessionEndpoint``.
+        The session authentication token from `GetSessionEndpoint`.
 
     Returns
     -------
     str
         A connection URL of the form
-        ``sc://host:443/;use_ssl=true;x-aws-proxy-auth=<token>``.
+        `sc://host:443/;use_ssl=true;x-aws-proxy-auth=<token>`.
 
     Examples
     --------
@@ -74,9 +74,9 @@ def start_session(
     Parameters
     ----------
     client
-        A boto3 ``emr-serverless`` client.
+        A boto3 `emr-serverless` client.
     application_id
-        The EMR Serverless application ID (must have ``sessionEnabled``).
+        The EMR Serverless application ID (must have `sessionEnabled`).
     execution_role
         IAM execution role ARN the session assumes to access your data.
 
@@ -106,7 +106,7 @@ def wait_for_session(
     Parameters
     ----------
     client
-        A boto3 ``emr-serverless`` client.
+        A boto3 `emr-serverless` client.
     application_id
         The EMR Serverless application ID.
     session_id
@@ -120,14 +120,14 @@ def wait_for_session(
     Returns
     -------
     str
-        The ready state reached (``STARTED`` or ``IDLE``).
+        The ready state reached (`STARTED` or `IDLE`).
 
     Raises
     ------
     RuntimeError
-        If the session reaches a ``FAILED`` or ``TERMINATED`` state.
+        If the session reaches a `FAILED` or `TERMINATED` state.
     TimeoutError
-        If the session does not become ready within ``timeout_seconds``.
+        If the session does not become ready within `timeout_seconds`.
     """
     start = time.time()
     while time.time() - start < timeout_seconds:
@@ -159,7 +159,7 @@ def get_connection_url(
     Parameters
     ----------
     client
-        A boto3 ``emr-serverless`` client.
+        A boto3 `emr-serverless` client.
     application_id
         The EMR Serverless application ID.
     session_id
@@ -168,8 +168,8 @@ def get_connection_url(
     Returns
     -------
     tuple[str, Any]
-        The ``sc://`` connection URL and the token expiry time (as returned
-        by the API, or ``None`` if absent). Tokens expire after one hour.
+        The `sc://` connection URL and the token expiry time (as returned
+        by the API, or `None` if absent). Tokens expire after one hour.
     """
     resp = client.get_session_endpoint(
         applicationId=application_id,
@@ -189,7 +189,7 @@ def terminate_session(
     Parameters
     ----------
     client
-        A boto3 ``emr-serverless`` client.
+        A boto3 `emr-serverless` client.
     application_id
         The EMR Serverless application ID.
     session_id
@@ -217,14 +217,14 @@ def list_sessions(
     Parameters
     ----------
     client
-        A boto3 ``emr-serverless`` client.
+        A boto3 `emr-serverless` client.
     application_id
         The EMR Serverless application ID.
 
     Returns
     -------
     list[dict]
-        The session summaries returned by ``ListSessions``.
+        The session summaries returned by `ListSessions`.
     """
     resp = client.list_sessions(applicationId=application_id)
     return resp.get("sessions", [])
@@ -237,16 +237,16 @@ def session_scope(
     region: str,
     timeout_seconds: int = 300,
 ) -> Iterator[SparkSession]:
-    """Yield a connected ``SparkSession``, terminating the session on exit.
+    """Yield a connected `SparkSession`, terminating the session on exit.
 
     Starts a Spark Connect session, waits for it to be ready, connects a
-    local ``SparkSession`` to it, and -- whatever happens -- terminates the
+    local `SparkSession` to it, and -- whatever happens -- terminates the
     EMR Serverless session afterwards so it stops incurring charges.
 
     Parameters
     ----------
     application_id
-        The EMR Serverless application ID (must have ``sessionEnabled``).
+        The EMR Serverless application ID (must have `sessionEnabled`).
     execution_role
         IAM execution role ARN the session assumes to access your data.
     region

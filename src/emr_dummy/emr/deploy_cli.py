@@ -157,7 +157,7 @@ def deploy(
 
     Optional Iceberg Integration (auto-detected)
         `ICEBERG_CATALOG_NAME`, `ICEBERG_GLUE_DB`,
-        `ICEBERG_S3_BUCKET``, `ICEBERG_WAREHOUSE_PATH`
+        `ICEBERG_S3_BUCKET`, `ICEBERG_WAREHOUSE_PATH`
 
     Optional Config
         `CONFIG_S3_URI` (overridden by `--config-s3`)

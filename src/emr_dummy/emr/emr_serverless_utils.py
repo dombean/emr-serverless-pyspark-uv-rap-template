@@ -332,9 +332,9 @@ def build_package(
 ) -> Path:
     """Build and zip the application source code for EMR Serverless.
 
-    This function copies the contents of the ``src/`` directory into a
+    This function copies the contents of the `src/` directory into a
     staging directory, applying ignore patterns to exclude build artifacts
-    (e.g., ``*.egg-info`` and ``__pycache__``). The staging directory is then
+    (e.g., `*.egg-info` and `__pycache__`). The staging directory is then
     zipped into a versioned archive suitable for upload to EMR Serverless.
     Dependencies are not packaged and are expected to be provided by the
     runtime environment (e.g., via the container image).
@@ -342,7 +342,7 @@ def build_package(
     Parameters
     ----------
     package_name
-        Logical name for the staged source directory inside ``build_dir``.
+        Logical name for the staged source directory inside `build_dir`.
     build_dir
         Path to the build directory. If it already exists, it will be
         deleted and recreated before staging.
@@ -355,7 +355,7 @@ def build_package(
     Raises
     ------
     FileNotFoundError
-        If the ``src/`` directory does not exist at the project root.
+        If the `src/` directory does not exist at the project root.
 
     Notes
     -----
