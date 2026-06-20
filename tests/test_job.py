@@ -35,6 +35,15 @@ class TestRequire:
             job._require({}, "iceberg.table_name")
 
 
+class TestRun:
+    """Tests for the run job-logic entry point."""
+
+    def test_validates_config_before_touching_spark(self) -> None:
+        """Run checks required config first, so spark is unused when it fails."""
+        with pytest.raises(SystemExit, match="iceberg.table_name"):
+            job.run(spark=None, cfg={})
+
+
 class TestLoadConfig:
     """Tests for the _load_config loader."""
 

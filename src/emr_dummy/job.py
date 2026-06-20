@@ -219,55 +219,85 @@ def _require(cfg: Dict[str, Any], dotted_key: str) -> Any:
     return value
 
 
-def main() -> None:
-    """Run the dummy EMR job.
+def run(spark: SparkSession, cfg: Dict[str, Any]) -> None:
+    """Run the dummy job's logic against a provided Spark session.
 
-    Parses arguments, loads configuration (from S3 or packaged file),
-    retrieves Iceberg catalog and database from Spark configuration,
-    creates the target Iceberg table if needed, and appends data.
+    This holds the actual work (read catalog config, build the DataFrame,
+    create the Iceberg table, append) and takes ``spark`` as an argument so
+    it can be driven by any session -- the cluster session in `main`, or a
+    Spark Connect session when debugging locally (see the Spark Connect
+    guide and `examples/debug_local.py`).
+
+    Parameters
+    ----------
+    spark
+        An active Spark session.
+    cfg
+        Parsed configuration; must contain `iceberg.table_name`.
 
     Notes
     -----
     - Writes 1,000 rows with schema `(id BIGINT, double BIGINT)`.
     - Creates the table if it does not exist.
-    - Stops the Spark session at the end.
+    - Reads `spark.emr_dummy.ICEBERG_*` from the Spark config; these are
+      injected via `--conf` at batch submit. A bare Spark Connect session
+      will not have them, so set them with `spark.conf.set(...)` before
+      calling this when debugging the Iceberg path.
+
+    Examples
+    --------
+    >>> run(spark, {"iceberg": {"table_name": "my_table"}})  # doctest: +SKIP
+    """
+    # Retrieve required table name from config
+    table_name = _require(cfg, "iceberg.table_name")
+
+    # Get Iceberg catalog and Glue DB from Spark config
+    catalog_name, glue_db = get_catalog_and_db(spark)
+
+    # Build full table names for SQL and DataFrame APIs
+    full_table_name_sql = get_full_table_name_sql(catalog_name, glue_db, table_name)
+    full_table_name_df = get_full_table_name_df(catalog_name, glue_db, table_name)
+
+    # Create DataFrame with 1,000 rows: (id, double)
+    df = spark.range(0, 1000).withColumn("double", F.col("id") * 2)
+
+    # Ensure Iceberg table exists (create if not)
+    spark.sql(
+        f"""
+        CREATE TABLE IF NOT EXISTS {full_table_name_sql} (
+            id bigint,
+            double bigint
+        )
+        USING iceberg
+        """,
+    )
+
+    # Append data to Iceberg table
+    df.writeTo(full_table_name_df).append()
+    logger.info(f"[SUCCESS] Wrote to Iceberg table: {full_table_name_df}")
+
+
+def main() -> None:
+    """Run the dummy EMR job (batch entry point).
+
+    Parses arguments, loads configuration (from S3 or packaged file), creates
+    a Spark session, runs the job logic via `run`, and always stops the
+    session at the end.
+
+    Notes
+    -----
+    - The job logic lives in `run`, which takes `spark` as an argument so it
+      can also be debugged interactively via Spark Connect.
     """
     # Parse CLI arguments and load configuration
     args = _parse_args()
     cfg = _load_config(args)
 
-    # Retrieve required table name from config
-    table_name = _require(cfg, "iceberg.table_name")
-
     # Create Spark session
     spark = create_spark_session(app_name="emr-dummy-job")
 
     try:
-        # Get Iceberg catalog and Glue DB from Spark config
-        catalog_name, glue_db = get_catalog_and_db(spark)
-
-        # Build full table names for SQL and DataFrame APIs
-        full_table_name_sql = get_full_table_name_sql(catalog_name, glue_db, table_name)
-        full_table_name_df = get_full_table_name_df(catalog_name, glue_db, table_name)
-
-        # Create DataFrame with 1,000 rows: (id, double)
-        df = spark.range(0, 1000).withColumn("double", F.col("id") * 2)
-
-        # Ensure Iceberg table exists (create if not)
-        spark.sql(
-            f"""
-            CREATE TABLE IF NOT EXISTS {full_table_name_sql} (
-                id bigint,
-                double bigint
-            )
-            USING iceberg
-            """,
-        )
-
-        # Append data to Iceberg table
-        df.writeTo(full_table_name_df).append()
-        logger.info(f"[SUCCESS] Wrote to Iceberg table: {full_table_name_df}")
-
+        run(spark, cfg)
     except Exception as e:
         logger.error(f"Job failed: {e}", exc_info=True)
         raise

@@ -25,46 +25,35 @@ from pathlib import Path
 
 import pyspark.sql.functions as F
 from dotenv import load_dotenv
-from pyspark.sql import DataFrame, SparkSession
 
 from emr_dummy.emr.spark_connect import session_scope
 
 load_dotenv()
 
 
-def build_doubles(spark: SparkSession) -> DataFrame:
-    """Build a small example DataFrame to step through.
-
-    Factoring your logic into functions that take ``spark`` is what makes it
-    debuggable: set a breakpoint inside one and call it with the remote
-    session below. Your real job's transforms should look like this.
-
-    Parameters
-    ----------
-    spark
-        A Spark session (here, connected to EMR Serverless via Spark Connect).
-
-    Returns
-    -------
-    DataFrame
-        A DataFrame of ``id`` and its double.
-    """
-    df_range = spark.range(0, 1000)
-    df_doubled = df_range.withColumn("double", F.col("id") * 2)
-    return df_doubled
-
-
 def main() -> None:
-    """Open a Spark Connect session and debug a transform against it."""
+    """Open a Spark Connect session and debug the job's logic against it."""
     app_id = os.getenv("EMR_APP_ID") or Path(".emr_app_id").read_text().strip()
     with session_scope(
         app_id,
         os.environ["EMR_EXECUTION_ROLE"],
         os.environ["REGION"],
     ) as spark:
-        df_doubled = build_doubles(spark)
+        # --- Option 1: poke around interactively -----------------------------
+        # Plain DataFrame ops need no special config; great for a first check.
+        df_doubled = spark.range(0, 1000).withColumn("double", F.col("id") * 2)
         breakpoint()  # inspect df_doubled here; e.g. df_doubled.show()
         df_doubled.show()
+
+        # --- Option 2: step through the real job logic -----------------------
+        # `run` takes `spark`, so you can debug exactly what the batch job runs.
+        # The Iceberg catalog confs are normally injected via --conf at submit;
+        # set them on the session first when debugging that path.
+        #
+        # from emr_dummy.job import run
+        # spark.conf.set("spark.emr_dummy.ICEBERG_GLUE_DB", "your_glue_db")
+        # spark.conf.set("spark.emr_dummy.ICEBERG_CATALOG_NAME", "glue_catalog")
+        # run(spark, {"iceberg": {"table_name": "debug_table"}})
 
 
 if __name__ == "__main__":
