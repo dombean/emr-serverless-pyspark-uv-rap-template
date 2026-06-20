@@ -223,7 +223,7 @@ def run(spark: SparkSession, cfg: Dict[str, Any]) -> None:
     """Run the dummy job's logic against a provided Spark session.
 
     This holds the actual work (read catalog config, build the DataFrame,
-    create the Iceberg table, append) and takes ``spark`` as an argument so
+    create the Iceberg table, append) and takes `spark` as an argument so
     it can be driven by any session -- the cluster session in `main`, or a
     Spark Connect session when debugging locally (see the Spark Connect
     guide and `examples/debug_local.py`).
