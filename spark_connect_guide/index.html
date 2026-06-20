@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../api_reference/">
+        <link rel="prev" href="../emr_serverless_guide/">
       
       
-        <link rel="next" href="../emr_serverless_guide/">
+        <link rel="next" href="../business_config_workflow/">
       
       
         
@@ -23,7 +23,7 @@
     
     
       
-        <title>Terraform Guide - emr-serverless-pyspark-uv-rap-template Documentation</title>
+        <title>Spark Connect Guide - emr-serverless-pyspark-uv-rap-template Documentation</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#infrastructure-setup-with-terraform" class="md-skip">
+        <a href="#spark-connect-guide" class="md-skip">
           Skip to content
         </a>
       
@@ -112,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Terraform Guide
+              Spark Connect Guide
             
           </span>
         </div>
@@ -259,7 +259,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../terraform_guide/" class="md-tabs__link">
           
   
   
@@ -435,37 +435,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Terraform Guide
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../terraform_guide/" class="md-nav__link">
         
   
   
@@ -481,92 +454,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#understanding-the-terraform-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Understanding the Terraform Files
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#terraform-vs-the-deployment-script-whats-the-difference" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Terraform vs. the Deployment Script: What's the Difference?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Prerequisites
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#provisioning-the-infrastructure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🚀 Provisioning the Infrastructure
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#configuring-your-env-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        📝 Configuring Your .env File
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#cleaning-up" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🧹 Cleaning Up
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -604,10 +491,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../spark_connect_guide/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spark Connect Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -623,6 +537,153 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-enable-spark-connect-on-the-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Enable Spark Connect on the application
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Connect
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Connect">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-drop-into-a-shell-quickest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A -- drop into a shell (quickest)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-get-a-url-for-your-ide-notebook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B -- get a URL for your IDE / notebook
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-c-programmatic-auto-terminating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option C -- programmatic, auto-terminating
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iam-permissions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IAM permissions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations-and-gotchas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations and gotchas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -690,21 +751,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#understanding-the-terraform-files" class="md-nav__link">
+  <a href="#how-it-works" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Understanding the Terraform Files
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#terraform-vs-the-deployment-script-whats-the-difference" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Terraform vs. the Deployment Script: What's the Difference?
+        How it works
       
     </span>
   </a>
@@ -723,10 +773,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#provisioning-the-infrastructure" class="md-nav__link">
+  <a href="#1-enable-spark-connect-on-the-application" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🚀 Provisioning the Infrastructure
+        1. Enable Spark Connect on the application
       
     </span>
   </a>
@@ -734,10 +784,60 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuring-your-env-file" class="md-nav__link">
+  <a href="#2-connect" class="md-nav__link">
     <span class="md-ellipsis">
       
-        📝 Configuring Your .env File
+        2. Connect
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Connect">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-drop-into-a-shell-quickest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A -- drop into a shell (quickest)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-get-a-url-for-your-ide-notebook" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B -- get a URL for your IDE / notebook
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-c-programmatic-auto-terminating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option C -- programmatic, auto-terminating
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Debugging
       
     </span>
   </a>
@@ -745,10 +845,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#cleaning-up" class="md-nav__link">
+  <a href="#iam-permissions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🧹 Cleaning Up
+        IAM permissions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limitations-and-gotchas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations and gotchas
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
       
     </span>
   </a>
@@ -775,235 +897,205 @@
   
 
 
-<blockquote>
-<p>ℹ️ <strong>EMR Studio is optional and off by default</strong></p>
-<p>By default, this Terraform script provisions only the backend infrastructure
-for your EMR Serverless jobs (S3 buckets, ECR, Glue, IAM roles). To also
-create the EMR Studio -- the interactive web-based notebook IDE -- enable it
-with a flag:</p>
-<p><code>bash
-terraform apply -var enable_emr_studio=true</code></p>
-<p>This provisions the Studio together with everything it needs (the VPC,
-private subnets, NAT gateway, security groups, and service role), using IAM
-auth mode so no IAM Identity Center setup is required. Open it via the
-<code>EMR_STUDIO_URL</code> output.</p>
-<p>To run notebooks against your EMR Serverless application, the application
-must expose interactive endpoints: set <code>EMR_STUDIO_ENABLED=true</code> in <code>.env</code>
-before running <code>deploy-to-emr --create-app</code>. If the application already
-exists, stop it first (updates require the CREATED or STOPPED state).</p>
-<p><strong>Costs and caveats:</strong></p>
+<h1 id="spark-connect-guide">Spark Connect Guide</h1>
+<p>Develop and debug PySpark interactively from your laptop -- VS Code, PyCharm,
+or a Jupyter notebook -- against a Spark engine running on EMR Serverless,
+using <a href="https://docs.aws.amazon.com/emr/latest/EMR-Serverless-UserGuide/spark-connect.html">Spark Connect</a>
+(EMR release <code>emr-7.13.0</code> and later).</p>
+<h2 id="how-it-works">How it works</h2>
+<p>Spark Connect uses a client-server split. Your PySpark <strong>client</strong> runs locally;
+DataFrame and SQL operations are sent over a <strong>gRPC/TLS</strong> endpoint to a Spark
+driver running on EMR Serverless, which executes them and streams results back.</p>
+<pre><code>laptop (PySpark client, your IDE)  --gRPC/TLS over sc://...:443--&gt;  EMR Serverless (driver + executors)
+</code></pre>
+<p>Because your client code runs locally, you debug it with <strong>ordinary local
+breakpoints</strong> -- there is no VPC, bastion, NAT gateway, or SSH tunnel. The
+connection is an outbound HTTPS/gRPC call authenticated with a short-lived
+token.</p>
+<p>!!! note "Spark Connect vs. a batch job"
+    With Spark Connect your <em>driver code</em> runs on your laptop and only the
+    Spark compute is remote -- ideal for interactive/exploratory work. A
+    normal <code>deploy-to-emr --submit</code> batch job still runs the entire driver on
+    EMR; use that for scheduled/production runs.</p>
+<h2 id="prerequisites">Prerequisites</h2>
 <ul>
-<li>The Studio itself is free, but the VPC it creates includes a NAT gateway
-  that runs at roughly $0.05/hour plus data charges. Set the flag back to
-  <code>false</code> when not in use. (For interactive development without any VPC, use
-  <a href="../spark_connect_guide/">Spark Connect</a> instead.)</li>
-<li>To attach a notebook to your application inside the Studio, you select the
-  application plus a <strong>runtime role</strong> -- your existing <code>EMR_EXECUTION_ROLE</code>
-  works for that. However, the IAM user/role <em>opening</em> the Studio needs its
-  own permissions: <code>elasticmapreduce:*Studio*</code>-style actions to access the
-  Studio and its workspaces, <code>emr-serverless:AccessInteractiveEndpoints</code> on
-  the application, and <code>iam:PassRole</code> on the runtime role. See the
-  <a href="https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-studio-user-permissions.html">AWS user-permissions documentation for EMR Studio</a>.</li>
+<li>An EMR Serverless application on <strong><code>emr-7.13.0</code> or later</strong> with Spark
+  Connect sessions enabled (see below).</li>
+<li>A local Python <strong>3.10+</strong> environment (the session APIs need <code>boto3&gt;=1.43</code>,
+  which requires 3.10+). Installed via the <code>dev</code> extra:
+  <code>bash
+  uv pip install -e ".[dev]"</code></li>
+<li>The local <code>pyspark[connect]</code> version <strong>must exactly match</strong> the application's
+  Spark version (<code>3.5.6</code> for <code>emr-7.13.0</code>) -- already pinned in the <code>dev</code> extra.</li>
+<li>IAM permissions on your caller identity (see <a href="#iam-permissions">IAM</a>).</li>
 </ul>
-</blockquote>
-<h1 id="infrastructure-setup-with-terraform">🏗️ Infrastructure Setup with Terraform</h1>
-<p>This guide explains how to use the provided Terraform scripts to provision the
-necessary AWS infrastructure for this project. Following these steps will create
-the S3 bucket, ECR repository, and all the required IAM roles and permissions.</p>
-<hr />
-<h3 id="understanding-the-terraform-files">Understanding the Terraform Files</h3>
-<p>The infrastructure is defined across six files in the <code>terraform/</code> directory.
-Here’s a breakdown of what each file does:</p>
-<ul>
-<li>
-<p><strong><code>variables.tf</code></strong>: This file is where you define the input variables for your
-  infrastructure. Think of them as parameters you can pass to your Terraform scripts
-  to <strong>customise</strong> your deployment. For example, you can change the AWS region,
-  S3 bucket name, or environment (dev, staging, prod) by modifying the variables
-  in this file or by creating a <code>terraform.tfvars</code> file to override them.</p>
-</li>
-<li>
-<p><strong><code>main.tf</code></strong>: This is the core of your infrastructure definition. It contains
-  the main set of instructions that tell Terraform what to create. It uses the
-  variables from <code>variables.tf</code> to configure the resources.
-  In this project, <code>main.tf</code> defines:</p>
-<ul>
-<li>An S3 bucket for job <strong>artifacts</strong> and logs.</li>
-<li>A dedicated S3 bucket for the <strong>Iceberg data warehouse</strong>.</li>
-<li>An ECR repository for Docker images.</li>
-<li>An AWS Glue Database to act as the <strong>Iceberg catalogue</strong>.</li>
-<li>The IAM roles and policies needed for EMR Serverless to access these resources.</li>
-</ul>
-</li>
-<li>
-<p><strong><code>network.tf</code></strong>: Defines the VPC that EMR Studio requires -- public
-  subnet, two private subnets, NAT gateway, and an S3 gateway endpoint. Created
-  only when <code>enable_emr_studio</code> is true. (Spark Connect needs none of this.)</p>
-</li>
-<li>
-<p><strong><code>studio.tf</code></strong>: Defines the <strong>optional</strong> EMR Studio (gated behind
-  <code>enable_emr_studio</code>, off by default): the Studio itself (IAM auth mode), its
-  workspace/engine security groups, and its service role. See the note at the
-  top of this page.</p>
-</li>
-<li>
-<p><strong><code>outputs.tf</code></strong>: This file declares the output values that you want to be easily
-  accessible after Terraform has created the infrastructure. When you run
-  <code>terraform apply</code>, the values of the outputs defined in this file will be printed
-  to your console. This is particularly useful for getting the ARNs and names of
-  the resources you've just created, which you'll need for your <code>.env</code> file.
-  Outputs for the optional EMR Studio (e.g. <code>EMR_STUDIO_URL</code>) are <code>null</code> until
-  <code>enable_emr_studio</code> is enabled.</p>
-</li>
-<li>
-<p><strong><code>versions.tf</code></strong>: Pins the required Terraform version (<code>&gt;= 1.5</code>) and the
-  AWS provider (<code>~&gt; 6.0</code>), so everyone provisions with a compatible toolchain.</p>
-</li>
-</ul>
-<hr />
-<h3 id="terraform-vs-the-deployment-script-whats-the-difference">Terraform vs. the Deployment Script: What's the Difference?</h3>
-<p>It is important to understand the distinct roles of Terraform and
-the <code>deploy-to-emr</code> script:</p>
-<ul>
-<li>
-<p><strong>Terraform (Infrastructure Setup)</strong>: The Terraform script is responsible
-  for provisioning the <strong>foundational, long-lived AWS resources</strong>. This includes
-  the IAM roles, S3 buckets, ECR repository, and Glue Database. You typically
-  run this <strong>once</strong> to set up your environment.</p>
-</li>
-<li>
-<p><strong><code>deploy-to-emr</code> script (Application Deployment)</strong>: The
-  <code>uv run deploy-to-emr --create-app</code> command creates the <strong>EMR Serverless application</strong>
-  itself. This application is tightly coupled to your code and a specific Docker
-  image version. Since the image URI changes with each new build, managing the
-  application lifecycle through the deployment script provides more speed and
-  flexibility for day-to-day development and deployment.</p>
-</li>
-</ul>
-<p>This separation ensures that your stable infrastructure is managed consistently,
-while your application can be updated and deployed rapidly.</p>
-<hr />
-<h3 id="prerequisites">Prerequisites</h3>
-<p>Before you begin, make sure you have the following installed and configured:</p>
-<ol>
-<li><strong>Terraform</strong>: <a href="https://learn.hashicorp.com/tutorials/terraform/install-cli">Install Terraform</a>
-    on your local machine.</li>
-<li><strong>AWS CLI</strong>: <a href="https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html">Install and configure the AWS CLI</a>
-    with credentials for your AWS account. You should have permissions to
-    create S3 buckets, ECR repositories, and IAM roles.</li>
-</ol>
-<hr />
-<h3 id="provisioning-the-infrastructure">🚀 Provisioning the Infrastructure</h3>
-<p>The Terraform scripts are located in the <code>terraform/</code> directory.</p>
-<ol>
-<li>
-<p><strong>Navigate to the Terraform directory:</strong></p>
-<pre><code>```bash
-cd terraform
-```
-</code></pre>
-</li>
-<li>
-<p><strong>Initialise Terraform:</strong>
-    This command downloads the necessary provider plug-ins. You only need to
-    run this once per project.</p>
-<pre><code>```bash
-terraform init
-```
-</code></pre>
-</li>
-<li>
-<p><strong>(Optional) Customise Variables:</strong>
-    Open the <code>variables.tf</code> file to review the available options. You can change
-    the default values here, or create a <code>terraform.tfvars</code> file to override them
-    for your specific environment. For example, to change the S3 bucket name,
-    you could create a <code>terraform.tfvars</code> file with the following content:</p>
-<pre><code>```terraform
-s3_artifact_bucket_name = "my-unique-emr-artifacts"
-iceberg_s3_bucket_name = "my-unique-iceberg-data"
-```
-</code></pre>
-</li>
-<li>
-<p><strong>Plan the Deployment:</strong>
-    This command shows you what resources Terraform will create, modify, or destroy.
-    It's a great way to review changes before applying them.</p>
-<pre><code>```bash
-terraform plan
-```
-</code></pre>
-</li>
-<li>
-<p><strong>Apply the Configuration:</strong>
-    This command will create the resources in your AWS account.</p>
-<pre><code>```bash
-terraform apply
-```
-</code></pre>
-<p>Terraform will show you the plan again and ask for confirmation.
-Type <code>yes</code> and press Enter to proceed.</p>
-</li>
-</ol>
-<hr />
-<h3 id="configuring-your-env-file">📝 Configuring Your <code>.env</code> File</h3>
-<p>After <code>terraform apply</code> completes successfully, it will print a list of outputs.
-These outputs contain the names and ARNs of the resources that were just created.
-You will use these values to create your <code>.env</code> file.</p>
-<ol>
-<li>
-<p><strong>Copy the example file:</strong>
-    In the root of the repository, copy the <code>.env.example</code> file to
-    a new file named <code>.env</code>.</p>
-<pre><code>```bash
-cp .env.example .env
-```
-</code></pre>
-</li>
-<li>
-<p><strong>Update <code>.env</code> with Terraform outputs:</strong>
-    Open the newly created <code>.env</code> file and replace the placeholder values with
-     the outputs from the <code>terraform apply</code> command.</p>
-<p>Your <code>terraform apply</code> output will look something like this:</p>
-<pre><code>```
-Outputs:
+<h2 id="1-enable-spark-connect-on-the-application">1. Enable Spark Connect on the application</h2>
+<p>Set the flag before creating/updating the app so it exposes interactive
+endpoints:</p>
+<pre><code class="language-bash"># .env
+RELEASE_LABEL=emr-7.13.0
+SPARK_CONNECT_ENABLED=true
 
-EMR_EXECUTION_ROLE = "arn:aws:iam::{YOUR_ACCOUNT_ID}:role/emr-spark-uv-emr-execution-role-dev"
-ICEBERG_GLUE_DB = "emr_serverless_iceberg_dev"
-ICEBERG_S3_BUCKET = "your-iceberg-data-bucket-dev"
-IMAGE_URI = "{YOUR_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/emr-pyspark"
-S3_BUCKET = "your-artifacts-bucket-dev"
-```
+deploy-to-emr --build-image   # image must be emr-7.13.0-based
+deploy-to-emr --create-app
 </code></pre>
-<p>Use these values to update your <code>.env</code> file accordingly:</p>
-<pre><code>```bash
-# .env
-
-REGION=eu-west-2
-S3_BUCKET="your-artifacts-bucket-dev"  # &lt;-- Use the S3_BUCKET output
-EMR_EXECUTION_ROLE="arn:aws:iam::{YOUR_ACCOUNT_ID}:role/emr-spark-uv-emr-execution-role-dev" # &lt;-- Use the EMR_EXECUTION_ROLE output
-IMAGE_URI="{YOUR_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/emr-pyspark:7.13.0" # &lt;-- Use the IMAGE_URI output and add a tag
-
-# Iceberg Configuration
-ICEBERG_S3_BUCKET="your-iceberg-data-bucket-dev" # &lt;-- Use the ICEBERG_S3_BUCKET output
-ICEBERG_GLUE_DB="emr_serverless_iceberg_dev" # &lt;-- Use the ICEBERG_GLUE_DB output
-...
-```
+<p><code>--create-app</code> sets <code>interactiveConfiguration.sessionEnabled = true</code>. If the
+application already exists, it is updated in place -- but EMR Serverless only
+allows updates while it is in the <code>CREATED</code> or <code>STOPPED</code> state, so stop it
+first if needed:</p>
+<pre><code class="language-bash">aws emr-serverless stop-application --application-id &lt;EMR_APP_ID&gt;
 </code></pre>
+<h2 id="2-connect">2. Connect</h2>
+<h3 id="option-a-drop-into-a-shell-quickest">Option A -- drop into a shell (quickest)</h3>
+<pre><code class="language-bash">spark-connect shell
+</code></pre>
+<p>This starts a session, waits for it, opens a Python REPL with a connected
+<code>spark</code> object, and <strong>terminates the session when you exit</strong> (Ctrl-D):</p>
+<pre><code class="language-python">&gt;&gt;&gt; spark.range(5).show()
+&gt;&gt;&gt; spark.sql(&quot;SELECT 1 + 1 AS result&quot;).show()
+</code></pre>
+<h3 id="option-b-get-a-url-for-your-ide-notebook">Option B -- get a URL for your IDE / notebook</h3>
+<pre><code class="language-bash">spark-connect start
+</code></pre>
+<p>This prints a session ID and an <code>export SPARK_REMOTE='sc://...:443/...'</code> line.
+Export it, and any <code>SparkSession.builder.getOrCreate()</code> (or the <code>pyspark</code>
+shell) connects automatically:</p>
+<pre><code class="language-python">from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.getOrCreate()  # uses SPARK_REMOTE
+spark.range(10).show()
+</code></pre>
+<p>The session keeps running after <code>start</code> returns. <strong>Stop it when done</strong> so you
+stop paying:</p>
+<pre><code class="language-bash">spark-connect list                 # see active sessions
+spark-connect stop &lt;SESSION_ID&gt;
+</code></pre>
+<h3 id="option-c-programmatic-auto-terminating">Option C -- programmatic, auto-terminating</h3>
+<p>Use the context manager from <code>emr_dummy.emr.spark_connect</code> directly:</p>
+<pre><code class="language-python">from emr_dummy.emr.spark_connect import session_scope
+
+with session_scope(app_id, execution_role, region=&quot;eu-west-2&quot;) as spark:
+    spark.range(1000).filter(&quot;id % 2 = 0&quot;).count()
+# session terminated automatically here
+</code></pre>
+<h2 id="debugging">Debugging</h2>
+<p>Set a breakpoint anywhere in your client code and run under your IDE's
+debugger as normal -- it's a local process. When execution hits a
+<code>df.show()</code>/<code>.count()</code>/<code>.collect()</code>, the work runs remotely and the result
+comes back to your debugger. Use <code>GetResourceDashboard</code> (or the EMR Serverless
+console) to open the live Spark UI for a session.</p>
+<p>A ready-to-run scratch script lives at
+<a href="https://github.com/dombean/emr-serverless-pyspark-uv-rap-template/blob/main/examples/debug_local.py"><code>examples/debug_local.py</code></a>.
+It loads <code>.env</code>, reads the application ID from <code>.emr_app_id</code>, opens a session,
+and stops at a <code>breakpoint()</code>. Run it with <code>python examples/debug_local.py</code>
+(terminal pdb) or open it in your IDE and hit Debug:</p>
+<pre><code class="language-bash">python examples/debug_local.py
+</code></pre>
+<p>The pattern it shows -- putting your logic in a function that <strong>takes <code>spark</code>
+as an argument</strong> -- is what makes your real job debuggable: call that function
+with the remote session and step through it, while <code>main.py</code> stays the batch
+entry point.</p>
+<h2 id="iam-permissions">IAM permissions</h2>
+<p>The identity that <em>starts sessions</em> (your laptop's role/user) needs:</p>
+<pre><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [&quot;emr-serverless:StartSession&quot;, &quot;emr-serverless:ListSessions&quot;],
+      &quot;Resource&quot;: &quot;arn:aws:emr-serverless:{region}:{account}:/applications/{app-id}&quot;
+    },
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+        &quot;emr-serverless:GetSession&quot;,
+        &quot;emr-serverless:GetSessionEndpoint&quot;,
+        &quot;emr-serverless:TerminateSession&quot;,
+        &quot;emr-serverless:GetResourceDashboard&quot;
+      ],
+      &quot;Resource&quot;: &quot;arn:aws:emr-serverless:{region}:{account}:/applications/{app-id}/sessions/*&quot;
+    },
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: &quot;iam:PassRole&quot;,
+      &quot;Resource&quot;: &quot;arn:aws:iam::{account}:role/{EMRServerlessExecutionRole}&quot;,
+      &quot;Condition&quot;: {
+        &quot;StringLike&quot;: { &quot;iam:PassedToService&quot;: &quot;emr-serverless.amazonaws.com&quot; }
+      }
+    }
+  ]
+}
+</code></pre>
+<p>The execution role passed to the session is your existing <code>EMR_EXECUTION_ROLE</code>
+-- it grants access to your data (S3, Glue, Iceberg).</p>
+<h2 id="limitations-and-gotchas">Limitations and gotchas</h2>
+<ul>
+<li><strong>EMR <code>7.13.0</code>+ only</strong>, Spark engine only.</li>
+<li><strong>DataFrame and SQL APIs only</strong> -- RDD APIs are not supported.</li>
+<li><strong>Auth tokens expire after 1 hour</strong>; sessions also have a configurable idle
+  timeout (1 hour default) and a 24-hour hard cap. <code>spark-connect shell</code>/the
+  context manager handle teardown; for <code>start</code>, remember to <code>stop</code>.</li>
+<li><strong>Port <code>:443</code> is required</strong> in the URL -- without it the client defaults to
+  15002, which isn't reachable. The helper handles this for you.</li>
+<li><strong>Python UDFs</strong> need your local Python <em>minor</em> version to match the workers.
+  The EMR <code>7.x</code> image runs <strong>Python 3.9</strong> by default, while this client needs
+  3.10+, so <code>@udf</code>/<code>spark.udf.register</code> will raise <code>PYTHON_VERSION_MISMATCH</code>
+  unless you build a <a href="https://docs.aws.amazon.com/emr/latest/EMR-Serverless-UserGuide/application-custom-image.html">custom image</a>
+  with a matching Python. Built-in SQL and DataFrame operations are unaffected.</li>
+<li><strong>No extra charge</strong> for Spark Connect -- you pay only for the EMR Serverless
+  compute consumed while a session is active.</li>
+<li>Lake Formation fine-grained access control and Trusted Identity Propagation
+  are not supported for Spark Connect sessions.</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>Issues hit while setting this up, with fixes:</p>
+<ul>
+<li>
+<p><strong><code>Missing environment variables: APP_NAME</code> (or similar).</strong> A required key
+  isn't set. <code>--create-app</code> needs <code>REGION</code>, <code>APP_NAME</code>, <code>RELEASE_LABEL</code>, and
+  <code>IMAGE_URI</code>; <code>--package</code>/<code>--submit</code> also need <code>S3_BUCKET</code>,
+  <code>EMR_EXECUTION_ROLE</code>, and <code>EMR_APP_ID</code>. Copy <code>.env.example</code> to <code>.env</code> and
+  fill it in from <code>terraform output</code>.</p>
 </li>
-</ol>
-<p>You are now ready to deploy your EMR Serverless application!</p>
-<hr />
-<h3 id="cleaning-up">🧹 Cleaning Up</h3>
-<p>When you are finished with the infrastructure and want to avoid incurring further
-costs, you can destroy all the resources created by Terraform with a single command:</p>
-<pre><code class="language-bash">terraform destroy
-</code></pre>
-<p><strong>A Note on Force Deletion:</strong> The ECR repository is configured with
-<code>force_delete = true</code> and the S3 buckets are configured with <code>force_destroy = true</code>.
-This means <code>terraform destroy</code> will delete these resources and all of their
-contents (Docker images and S3 objects). This is convenient for development but be
-cautious if you ever use this script in a production environment where you
-might want to preserve data.</p>
+<li>
+<p><strong>Which value wins, <code>.env</code> or the shell?</strong> The CLIs call
+  <code>load_dotenv(override=True)</code>, so <code>.env</code> takes precedence over variables
+  already exported in your shell. Edit <code>.env</code> and it is authoritative; if you
+  prefer a one-off shell override, comment the line out of <code>.env</code> first.</p>
+</li>
+<li>
+<p><strong><code>ValidationException ... imageConfiguration.imageUri failed to satisfy
+  ... pattern</code>.</strong> The image URI is missing its tag. EMR requires
+  <code>&lt;account&gt;.dkr.ecr.&lt;region&gt;.amazonaws.com/&lt;repo&gt;:&lt;tag&gt;</code> -- the
+  <code>terraform output IMAGE_URI</code> is <strong>untagged</strong>, so append a tag (e.g.
+  <code>:7.13.0</code>) and make sure <code>deploy-to-emr --build-image</code> has pushed it.</p>
+</li>
+<li>
+<p><strong><code>KeyError: 'EMR_APP_ID'</code>.</strong> <code>--create-app</code> writes the ID to the
+  <code>.emr_app_id</code> file but only exports it within its own process. Read it from
+  that file (as <code>examples/debug_local.py</code> does) or add <code>EMR_APP_ID=...</code> to
+  <code>.env</code>.</p>
+</li>
+<li>
+<p><strong><code>ValidationException</code> when enabling Spark Connect on an existing app.</strong>
+  Interactive config can only change while the app is <code>CREATED</code> or <code>STOPPED</code>.
+  Stop it first: <code>aws emr-serverless stop-application --application-id &lt;id&gt;</code>,
+  then re-run <code>deploy-to-emr --create-app</code>.</p>
+</li>
+<li>
+<p><strong><code>docker login</code> fails with <code>error storing credentials ... (-25299)</code></strong>
+  (macOS). A stale ECR entry in your login keychain. Remove it:
+  <code>security delete-internet-password -s &lt;account&gt;.dkr.ecr.&lt;region&gt;.amazonaws.com</code>,
+  then retry. To avoid it recurring, drop <code>"credsStore": "osxkeychain"</code> from
+  <code>~/.docker/config.json</code>.</p>
+</li>
+<li>
+<p><strong><code>ImportError</code> / connection errors from the client.</strong> Your local
+  <code>pyspark[connect]</code> version must exactly match the application's Spark version
+  (<code>3.5.6</code> for <code>emr-7.13.0</code>) -- it's pinned in the <code>dev</code> extra, so install with
+  <code>uv pip install -e ".[dev]"</code> on Python 3.10+.</p>
+</li>
+</ul>
 
 
 
