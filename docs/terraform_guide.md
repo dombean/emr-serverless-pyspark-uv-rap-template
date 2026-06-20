@@ -43,7 +43,7 @@ the S3 bucket, ECR repository, and all the required IAM roles and permissions.
 
 ### Understanding the Terraform Files
 
-The infrastructure is defined across five files in the `terraform/` directory.
+The infrastructure is defined across six files in the `terraform/` directory.
 Here’s a breakdown of what each file does:
 
   - **`variables.tf`**: This file is where you define the input variables for your
@@ -80,6 +80,9 @@ Here’s a breakdown of what each file does:
   the resources you've just created, which you'll need for your `.env` file.
   Outputs for the optional EMR Studio (e.g. `EMR_STUDIO_URL`) are `null` until
   `enable_emr_studio` is enabled.
+
+  - **`versions.tf`**: Pins the required Terraform version (`>= 1.5`) and the
+  AWS provider (`~> 6.0`), so everyone provisions with a compatible toolchain.
 
 ---
 

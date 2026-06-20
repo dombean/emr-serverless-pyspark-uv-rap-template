@@ -361,7 +361,7 @@ uv run deploy-to-emr --dry-run
     "sparkSubmit": {
       "entryPoint": "s3://my-bucket/emr-code/my_pipeline/dev/releases/20250808_123456-ab12cd34/main.py",
       "entryPointArguments": [],
-      "sparkSubmitParameters": "--py-files s3://my-bucket/emr-code/my_pipeline/dev/releases/20250808_123456-ab12cd34/code.zip --conf spark.sql.catalog.glue_catalog=org.apache.iceberg.spark.SparkCatalog --conf spark.sql.catalog.glue_catalog.catalog-impl=org.apache.iceberg.aws.glue.GlueCatalog --conf spark.sql.catalog.glue_catalog.warehouse=s3://your-data-bucket/iceberg/warehouse"
+      "sparkSubmitParameters": "--py-files s3://my-bucket/emr-code/my_pipeline/dev/releases/20250808_123456-ab12cd34/code.zip --conf spark.sql.catalog.glue_catalog=org.apache.iceberg.spark.SparkCatalog --conf spark.sql.catalog.glue_catalog.catalog-impl=org.apache.iceberg.aws.glue.GlueCatalog --conf spark.sql.catalog.glue_catalog.warehouse=s3://your-iceberg-data-bucket/iceberg/warehouse"
     }
   },
   "configurationOverrides": {
@@ -488,9 +488,9 @@ Add the following to your `.env` (see `.env.example`):
 ```bash
 ICEBERG_CATALOG_NAME=glue_catalog
 ICEBERG_GLUE_DB=your_glue_database
-ICEBERG_S3_BUCKET=your-data-bucket
+ICEBERG_S3_BUCKET=your-iceberg-data-bucket
 # Optional override (otherwise derived from bucket):
-# ICEBERG_WAREHOUSE_PATH=s3://your-data-bucket/iceberg/warehouse
+# ICEBERG_WAREHOUSE_PATH=s3://your-iceberg-data-bucket/iceberg/warehouse
 ```
 
 A sample `config.toml` is included to mimic a future config-driven workflow.
