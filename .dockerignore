@@ -317,6 +317,7 @@ $RECYCLE.BIN/
 terraform/
 docs/
 tests/
+examples/
 site/
 mkdocs.yaml
 .pre-commit-config.yaml

@@ -18,6 +18,8 @@ repos:
       - id: check-yaml
       - id: check-toml
       - id: debug-statements
+        # examples/debug_local.py uses breakpoint() on purpose.
+        exclude: ^examples/
 
   - repo: https://github.com/psf/black
     rev: 26.5.1 # Using a more recent version

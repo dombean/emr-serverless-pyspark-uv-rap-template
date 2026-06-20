@@ -123,6 +123,21 @@ debugger as normal -- it's a local process. When execution hits a
 comes back to your debugger. Use `GetResourceDashboard` (or the EMR Serverless
 console) to open the live Spark UI for a session.
 
+A ready-to-run scratch script lives at
+[`examples/debug_local.py`](https://github.com/dombean/emr-serverless-pyspark-uv-rap-template/blob/main/examples/debug_local.py).
+It loads `.env`, reads the application ID from `.emr_app_id`, opens a session,
+and stops at a `breakpoint()`. Run it with `python examples/debug_local.py`
+(terminal pdb) or open it in your IDE and hit Debug:
+
+```bash
+python examples/debug_local.py
+```
+
+The pattern it shows -- putting your logic in a function that **takes `spark`
+as an argument** -- is what makes your real job debuggable: call that function
+with the remote session and step through it, while `main.py` stays the batch
+entry point.
+
 ## IAM permissions
 
 The identity that *starts sessions* (your laptop's role/user) needs:
@@ -179,3 +194,45 @@ The execution role passed to the session is your existing `EMR_EXECUTION_ROLE`
   compute consumed while a session is active.
 - Lake Formation fine-grained access control and Trusted Identity Propagation
   are not supported for Spark Connect sessions.
+
+## Troubleshooting
+
+Issues hit while setting this up, with fixes:
+
+- **`Missing environment variables: APP_NAME` (or similar).** A required key
+  isn't set. `--create-app` needs `REGION`, `APP_NAME`, `RELEASE_LABEL`, and
+  `IMAGE_URI`; `--package`/`--submit` also need `S3_BUCKET`,
+  `EMR_EXECUTION_ROLE`, and `EMR_APP_ID`. Copy `.env.example` to `.env` and
+  fill it in from `terraform output`.
+
+- **You edit `.env` but nothing changes.** `load_dotenv()` does **not**
+  override variables already set in your shell -- a stale `export FOO=...`
+  shadows the `.env` value. Find it with `echo $FOO` and `unset FOO`, or fix
+  the exported value.
+
+- **`ValidationException ... imageConfiguration.imageUri failed to satisfy
+  ... pattern`.** The image URI is missing its tag. EMR requires
+  `<account>.dkr.ecr.<region>.amazonaws.com/<repo>:<tag>` -- the
+  `terraform output IMAGE_URI` is **untagged**, so append a tag (e.g.
+  `:7.13.0`) and make sure `deploy-to-emr --build-image` has pushed it.
+
+- **`KeyError: 'EMR_APP_ID'`.** `--create-app` writes the ID to the
+  `.emr_app_id` file but only exports it within its own process. Read it from
+  that file (as `examples/debug_local.py` does) or add `EMR_APP_ID=...` to
+  `.env`.
+
+- **`ValidationException` when enabling Spark Connect on an existing app.**
+  Interactive config can only change while the app is `CREATED` or `STOPPED`.
+  Stop it first: `aws emr-serverless stop-application --application-id <id>`,
+  then re-run `deploy-to-emr --create-app`.
+
+- **`docker login` fails with `error storing credentials ... (-25299)`**
+  (macOS). A stale ECR entry in your login keychain. Remove it:
+  `security delete-internet-password -s <account>.dkr.ecr.<region>.amazonaws.com`,
+  then retry. To avoid it recurring, drop `"credsStore": "osxkeychain"` from
+  `~/.docker/config.json`.
+
+- **`ImportError` / connection errors from the client.** Your local
+  `pyspark[connect]` version must exactly match the application's Spark version
+  (`3.5.6` for `emr-7.13.0`) -- it's pinned in the `dev` extra, so install with
+  `uv pip install -e ".[dev]"` on Python 3.10+.

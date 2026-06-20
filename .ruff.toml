@@ -35,3 +35,5 @@ inline-quotes = "double"
 "*/__init__.py" = ["D104"]
 "*/" = ["B006", "PTH123", "B008"]
 "tests/*" = ["ANN", "D100", "D102", "E501", "F403", "F405", "N803", "PT011", "B017", "D205"]
+# examples/debug_local.py uses breakpoint() on purpose (T100).
+"examples/*" = ["T100"]
