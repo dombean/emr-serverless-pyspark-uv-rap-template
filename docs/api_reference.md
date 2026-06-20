@@ -28,12 +28,12 @@ The main PySpark job logic.
 
 ---
 
-### Remote Debugging Hook 🐛
+### Spark Connect 🔌
 
-Attaches the Spark driver to a remote debugger (PyCharm or VS Code) through the
-bastion's reverse SSH tunnel. See the Remote Debugging Guide.
+Client helpers for interactive PySpark via Spark Connect on EMR Serverless.
+See the Spark Connect Guide.
 
-::: emr_dummy.debugging
+::: emr_dummy.emr.spark_connect
 
 ---
 

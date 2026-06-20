@@ -21,10 +21,10 @@
 >
 > **Costs and caveats:**
 >
-> - The Studio itself is free, but it shares its VPC with the remote-debugging
->   stack (see the Remote Debugging Guide), and the NAT gateway in that VPC
->   runs at roughly $0.05/hour plus data charges. Set the flag back to `false`
->   when not in use.
+> - The Studio itself is free, but the VPC it creates includes a NAT gateway
+>   that runs at roughly $0.05/hour plus data charges. Set the flag back to
+>   `false` when not in use. (For interactive development without any VPC, use
+>   [Spark Connect](spark_connect_guide.md) instead.)
 > - To attach a notebook to your application inside the Studio, you select the
 >   application plus a **runtime role** -- your existing `EMR_EXECUTION_ROLE`
 >   works for that. However, the IAM user/role *opening* the Studio needs its
@@ -64,12 +64,9 @@ Here’s a breakdown of what each file does:
       - The IAM roles and policies needed for EMR Serverless to access these resources.
 
 
-  - **`debugging.tf`**: Defines the **optional** remote-debugging stack
-  (gated behind `enable_remote_debugging`, off by default): a VPC with private
-  subnets and a NAT gateway, plus an SSM-accessed bastion that relays your IDE's
-  debug connection to the Spark driver. See the
-  [Remote Debugging Guide](remote_debugging_guide.md). The VPC is shared with
-  EMR Studio.
+  - **`network.tf`**: Defines the VPC that EMR Studio requires -- public
+  subnet, two private subnets, NAT gateway, and an S3 gateway endpoint. Created
+  only when `enable_emr_studio` is true. (Spark Connect needs none of this.)
 
   - **`studio.tf`**: Defines the **optional** EMR Studio (gated behind
   `enable_emr_studio`, off by default): the Studio itself (IAM auth mode), its
@@ -81,8 +78,8 @@ Here’s a breakdown of what each file does:
   `terraform apply`, the values of the outputs defined in this file will be printed
   to your console. This is particularly useful for getting the ARNs and names of
   the resources you've just created, which you'll need for your `.env` file.
-  Outputs for the optional features (e.g. `DEBUG_HOST`, `EMR_STUDIO_URL`) are
-  `null` until the corresponding flag is enabled.
+  Outputs for the optional EMR Studio (e.g. `EMR_STUDIO_URL`) are `null` until
+  `enable_emr_studio` is enabled.
 
 ---
 
@@ -207,7 +204,7 @@ You will use these values to create your `.env` file.
         REGION=eu-west-2
         S3_BUCKET="your-artifacts-bucket-dev"  # <-- Use the S3_BUCKET output
         EMR_EXECUTION_ROLE="arn:aws:iam::{YOUR_ACCOUNT_ID}:role/emr-spark-uv-emr-execution-role-dev" # <-- Use the EMR_EXECUTION_ROLE output
-        IMAGE_URI="{YOUR_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/emr-pyspark:7.9.0" # <-- Use the IMAGE_URI output and add a tag
+        IMAGE_URI="{YOUR_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/emr-pyspark:7.13.0" # <-- Use the IMAGE_URI output and add a tag
 
         # Iceberg Configuration
         ICEBERG_S3_BUCKET="your-iceberg-data-bucket-dev" # <-- Use the ICEBERG_S3_BUCKET output

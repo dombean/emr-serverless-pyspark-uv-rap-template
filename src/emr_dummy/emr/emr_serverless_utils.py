@@ -101,9 +101,8 @@ def create_or_update_emr_app(
     image_uri: str,
     release_label: str,
     region: str,
-    subnet_ids: list[str] | None = None,
-    security_group_ids: list[str] | None = None,
     studio_enabled: bool = False,
+    session_enabled: bool = False,
 ) -> str:
     """Create or update an EMR Serverless application.
 
@@ -114,18 +113,15 @@ def create_or_update_emr_app(
     image_uri
         The URI of the ECR image to use for the application.
     release_label
-        The EMR release label (e.g., "emr-7.9.0").
+        The EMR release label (e.g., "emr-7.13.0").
     region
         The AWS region in which to create or update the application.
-    subnet_ids
-        Private subnet IDs to attach the application to a VPC (required for
-        remote debugging so the driver can reach the bastion). Must be
-        provided together with ``security_group_ids``.
-    security_group_ids
-        Security group IDs for the application's worker ENIs.
     studio_enabled
         Enable interactive endpoints so the application can run notebooks
         from EMR Studio.
+    session_enabled
+        Enable Spark Connect sessions on the application (requires EMR
+        release 7.13.0 or later).
 
     Returns
     -------
@@ -134,30 +130,30 @@ def create_or_update_emr_app(
 
     Notes
     -----
-    If the application already exists and network or interactive
-    configuration is provided, the function attempts to update it in place.
-    EMR Serverless only allows updates while the application is in the
-    CREATED or STOPPED state.
+    If the application already exists and interactive configuration is
+    provided, the function attempts to update it in place. EMR Serverless
+    only allows updates while the application is in the CREATED or STOPPED
+    state.
 
     Examples
     --------
     >>> app_id = create_or_update_emr_app(
     ...     app_name="my-emr-app",
     ...     image_uri="123456789012.dkr.ecr.eu-west-2.amazonaws.com/my-image:latest",
-    ...     release_label="emr-7.9.0",
+    ...     release_label="emr-7.13.0",
     ...     region="eu-west-2"
     ... )
     >>> print(app_id)
     '00f1abcd1234efgh'
     """
     extra_config: dict = {}
-    if subnet_ids and security_group_ids:
-        extra_config["networkConfiguration"] = {
-            "subnetIds": subnet_ids,
-            "securityGroupIds": security_group_ids,
-        }
+    interactive_config: dict = {}
     if studio_enabled:
-        extra_config["interactiveConfiguration"] = {"studioEnabled": True}
+        interactive_config["studioEnabled"] = True
+    if session_enabled:
+        interactive_config["sessionEnabled"] = True
+    if interactive_config:
+        extra_config["interactiveConfiguration"] = interactive_config
 
     emr_client = boto3.client("emr-serverless", region_name=region)
     try:

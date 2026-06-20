@@ -23,7 +23,8 @@
 # much more efficient.
 
 # 1. Start with the official EMR Serverless base image for your target release.
-FROM public.ecr.aws/emr-serverless/spark/emr-7.9.0:latest
+#    emr-7.13.0+ is required for Spark Connect interactive sessions.
+FROM public.ecr.aws/emr-serverless/spark/emr-7.13.0:latest
 
 # The base image uses Amazon Linux. We'll set the user to root to install packages.
 USER root
@@ -35,9 +36,7 @@ RUN pip3 install uv
 COPY pyproject.toml uv.lock ./
 
 # First, compile a requirements.txt file from your project dependencies.
-# The "debug" extra bakes in the remote-debugging agents (pydevd-pycharm,
-# debugpy); they are inert unless DEBUG_HOST is set at job submission.
-RUN uv pip compile pyproject.toml --extra debug --output-file requirements.txt
+RUN uv pip compile pyproject.toml --output-file requirements.txt
 
 # Now, install the dependencies from the generated requirements.txt file.
 RUN uv pip install --system -r requirements.txt

@@ -40,38 +40,14 @@ variable "iceberg_glue_db_name" {
   default     = "emr_serverless_iceberg"
 }
 
-variable "enable_remote_debugging" {
-  description = "Create the VPC, NAT gateway, and SSM bastion used for remote debugging of EMR Serverless jobs. Costs money while enabled -- turn off when not debugging."
+variable "enable_emr_studio" {
+  description = "Create an EMR Studio (IAM auth mode) for interactive notebook development against EMR Serverless, together with the VPC and NAT gateway it requires. Costs money while enabled -- leave off unless you specifically want the Studio (Spark Connect needs none of this)."
   type        = bool
   default     = false
 }
 
-variable "debug_vpc_cidr" {
-  description = "CIDR block for the remote-debugging VPC."
+variable "studio_vpc_cidr" {
+  description = "CIDR block for the EMR Studio VPC."
   type        = string
   default     = "10.42.0.0/16"
-}
-
-variable "debug_port" {
-  description = "TCP port the Spark driver uses to reach the debugger through the bastion."
-  type        = number
-  default     = 3535
-}
-
-variable "bastion_ssh_public_key" {
-  description = "SSH public key granted access to the bastion as ec2-user (used for the reverse tunnel). Leave empty to add a key manually via SSM instead."
-  type        = string
-  default     = ""
-}
-
-variable "bastion_instance_type" {
-  description = "Instance type for the debug bastion."
-  type        = string
-  default     = "t3.micro"
-}
-
-variable "enable_emr_studio" {
-  description = "Create an EMR Studio (IAM auth mode) for interactive notebook development against EMR Serverless. Shares the VPC and NAT gateway with the remote-debugging stack."
-  type        = bool
-  default     = false
 }

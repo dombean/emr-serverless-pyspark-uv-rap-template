@@ -15,10 +15,21 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pyspark~=3.5.1", "pre-commit", "black", "ruff", "isort", "pytest"]
-# Remote debugging agents baked into the EMR image. Inert unless DEBUG_HOST
-# is set at job submission. Pin pydevd-pycharm to your PyCharm build version.
-debug = ["pydevd-pycharm", "debugpy>=1.8"]
+# Local development + Spark Connect client.
+# - pyspark[connect] is the Spark Connect client; its version MUST match the
+#   Spark version on your EMR Serverless application (3.5.6 for emr-7.13.0).
+# - boto3 1.43+ adds the EMR Serverless session APIs, but requires Python
+#   3.10+. The EMR image itself runs Python 3.9, so this floor is dev-only
+#   (gated by a marker) and does not affect the deployed package.
+dev = [
+    "pyspark[connect]==3.5.6",
+    "boto3>=1.43; python_version >= '3.10'",
+    "pre-commit",
+    "black",
+    "ruff",
+    "isort",
+    "pytest",
+]
 docs = [
     "mkdocs>=1.5.0",
     "mkdocs-material>=9.0.0",
@@ -27,6 +38,7 @@ docs = [
 
 [project.scripts]
 deploy-to-emr = "emr_dummy.emr.deploy_cli:deploy"
+spark-connect = "emr_dummy.emr.spark_connect_cli:cli"
 
 [build-system]
 requires = ["setuptools>=69"]

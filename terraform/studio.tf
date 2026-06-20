@@ -2,10 +2,9 @@
 # EMR Studio -- the web-based notebook IDE for interactive EMR Serverless
 # development.
 #
-# Created only when var.enable_emr_studio = true. Reuses the VPC, private
-# subnets, and NAT gateway defined in debugging.tf (created when either
-# enable_emr_studio or enable_remote_debugging is on). Uses IAM auth mode, so
-# no IAM Identity Center setup is needed: anyone who can sign in to the AWS
+# Created only when var.enable_emr_studio = true. Uses the VPC, private
+# subnets, and NAT gateway defined in network.tf. Uses IAM auth mode, so no
+# IAM Identity Center setup is needed: anyone who can sign in to the AWS
 # console with the right IAM permissions can open the Studio URL.
 #
 # The Studio itself is free; the shared NAT gateway is the running cost.
@@ -26,7 +25,7 @@ resource "aws_security_group" "studio_workspace" {
   count       = local.studio_count
   name        = "${local.studio_name}-workspace"
   description = "EMR Studio workspaces."
-  vpc_id      = aws_vpc.debug[0].id
+  vpc_id      = aws_vpc.main[0].id
 
   tags = merge(local.emr_managed_tag, {
     Name        = "${local.studio_name}-workspace"
@@ -38,7 +37,7 @@ resource "aws_security_group" "studio_engine" {
   count       = local.studio_count
   name        = "${local.studio_name}-engine"
   description = "EMR Studio engine."
-  vpc_id      = aws_vpc.debug[0].id
+  vpc_id      = aws_vpc.main[0].id
 
   tags = merge(local.emr_managed_tag, {
     Name        = "${local.studio_name}-engine"
@@ -270,8 +269,8 @@ resource "aws_emr_studio" "this" {
   count                       = local.studio_count
   name                        = local.studio_name
   auth_mode                   = "IAM"
-  vpc_id                      = aws_vpc.debug[0].id
-  subnet_ids                  = aws_subnet.debug_private[*].id
+  vpc_id                      = aws_vpc.main[0].id
+  subnet_ids                  = aws_subnet.private[*].id
   service_role                = aws_iam_role.studio_service_role[0].arn
   workspace_security_group_id = aws_security_group.studio_workspace[0].id
   engine_security_group_id    = aws_security_group.studio_engine[0].id

@@ -43,7 +43,7 @@ nav:
   - Guides:
     - Terraform Guide: terraform_guide.md
     - EMR Serverless Guide: emr_serverless_guide.md
-    - Remote Debugging Guide: remote_debugging_guide.md
+    - Spark Connect Guide: spark_connect_guide.md
     - Business Config Workflow: business_config_workflow.md
 
 extra:

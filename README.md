@@ -24,26 +24,29 @@ integration, see the [**EMR Serverless, CloudWatch & Iceberg Setup Guide**](http
 
 ---
 
-## 🐛 Live Remote Debugging & 📓 EMR Studio (Optional)
+## 🔌 Interactive PySpark with Spark Connect & 📓 EMR Studio (Optional)
 
-Two optional capabilities, both off by default and enabled with a Terraform flag:
-
-  - **Live remote debugging** -- set breakpoints in PyCharm or VS Code and step
-    through the Spark driver running on EMR Serverless, via a reverse SSH tunnel
-    through an SSM bastion
-    (`terraform apply -var enable_remote_debugging=true`, then
-    `uv run deploy-to-emr --package --submit --debug`). See the
-    [**Remote Debugging Guide**](https://github.com/dombean/emr-serverless-pyspark-uv-rap-template/blob/main/docs/remote_debugging_guide.md).
-  - **EMR Studio** -- the web-based notebook IDE for interactive development,
-    provisioned with everything it needs (VPC, security groups, service role)
-    via `terraform apply -var enable_emr_studio=true`. Set
-    `EMR_STUDIO_ENABLED=true` before `--create-app` so the application accepts
-    notebook sessions. See the
+  - **Spark Connect** -- develop and debug PySpark interactively from VS Code,
+    PyCharm, or Jupyter against EMR Serverless (`emr-7.13.0`+), with **ordinary
+    local breakpoints and no VPC or bastion**. Your client runs locally; the
+    Spark compute runs remotely over a gRPC/TLS endpoint. Enable it with
+    `SPARK_CONNECT_ENABLED=true` before `deploy-to-emr --create-app`, then:
+    ```bash
+    spark-connect shell        # REPL with a connected `spark`, auto-terminates
+    spark-connect start        # prints an sc:// URL / SPARK_REMOTE for your IDE
+    ```
+    See the [**Spark Connect Guide**](https://github.com/dombean/emr-serverless-pyspark-uv-rap-template/blob/main/docs/spark_connect_guide.md).
+  - **EMR Studio** -- the web-based notebook IDE, provisioned with everything it
+    needs (VPC, security groups, service role) via
+    `terraform apply -var enable_emr_studio=true`. Set `EMR_STUDIO_ENABLED=true`
+    before `--create-app` so the application accepts notebook sessions. The
+    Studio's VPC has a NAT gateway (~$0.05/hour) -- set the flag back to `false`
+    when idle. See the
     [**Terraform Guide**](https://github.com/dombean/emr-serverless-pyspark-uv-rap-template/blob/main/docs/terraform_guide.md)
     for setup, costs, and required user permissions.
 
-Both share one VPC and NAT gateway (~$0.05/hour while enabled) -- flip the flags
-back to `false` when idle.
+> For most interactive debugging, **Spark Connect is the simpler choice** --
+> it needs no networking infrastructure at all.
 
 ---
 
@@ -106,8 +109,9 @@ environment and the speed of a simple file upload for your code.
 
 ## 🛠 Prerequisites
 
-- 🐍 **Python 3.9–3.11** (matches `requires-python` in `pyproject.toml`; the
-  EMR 7.9 base image itself runs Python 3.9)
+- 🐍 **Python 3.9–3.11** for deploying (matches `requires-python`; the EMR
+  7.13 base image itself runs Python 3.9). **Spark Connect needs Python 3.10+**
+  locally (the session APIs require `boto3>=1.43`).
 - 📦 `uv` installed (e.g. `brew install uv`)
 - 🔑 AWS CLI with credentials configured (`aws configure` or `aws sso login`)
 - ☁️ An **EMR Serverless** application created in AWS
@@ -208,9 +212,9 @@ S3_BUCKET=your-artifacts-bucket
 EMR_APP_ID=00fulej7qh7jt90t
 EMR_EXECUTION_ROLE=arn:aws:iam::<your-aws-account-id>:role/YourEmrServerlessExecutionRole
 DEPLOY_ENV=dev   # optional, used in S3 prefix
-IMAGE_URI=<your-aws-account-id>.dkr.ecr.eu-west-2.amazonaws.com/emr-pyspark:7.9.0
+IMAGE_URI=<your-aws-account-id>.dkr.ecr.eu-west-2.amazonaws.com/emr-pyspark:7.13.0
 APP_NAME=emr-spark-uv
-RELEASE_LABEL=emr-7.9.0
+RELEASE_LABEL=emr-7.13.0
 ```
 
 ⚠️ **Important:**
@@ -535,7 +539,7 @@ S3_BUCKET=my-artifacts-bucket
 EMR_APP_ID=00fulej7qh7jt90t
 EMR_EXECUTION_ROLE=arn:aws:iam::<your-aws-account-id>:role/YourEmrServerlessExecutionRole
 APP_NAME=emr-spark-uv
-RELEASE_LABEL=emr-7.9.0
+RELEASE_LABEL=emr-7.13.0
 DEPLOY_ENV=dev
 ```
 

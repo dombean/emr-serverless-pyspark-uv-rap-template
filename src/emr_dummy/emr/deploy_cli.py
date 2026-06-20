@@ -80,14 +80,6 @@ load_dotenv()  # Load .env if present
 )
 @click.option("--submit", is_flag=True, help="Submit the job to EMR Serverless.")
 @click.option("--cleanup", is_flag=True, help="Stop and delete the EMR Serverless app.")
-@click.option(
-    "--debug",
-    is_flag=True,
-    help=(
-        "Attach the Spark driver to a remote debugger via the bastion tunnel "
-        "(requires DEBUG_HOST; see the remote debugging guide)."
-    ),
-)
 def deploy(
     entry_point: str,
     package_name: str,
@@ -101,7 +93,6 @@ def deploy(
     package: bool,
     submit: bool,
     cleanup: bool,
-    debug: bool,
 ) -> None:
     r"""Build, package, and deploy an EMR Serverless Spark job via CLI.
 
@@ -142,10 +133,6 @@ def deploy(
         Submit the Spark job to EMR Serverless using the packaged artifacts.
     cleanup : bool
         Stop and delete the EMR Serverless application and remove `.emr_app_id`.
-    debug : bool
-        Inject remote-debugging environment variables (`DEBUG_HOST`,
-        `DEBUG_PORT`, `DEBUGGER`) into the Spark driver so it attaches to
-        your IDE through the bastion's reverse SSH tunnel.
 
     Returns
     -------
@@ -175,14 +162,9 @@ def deploy(
     Optional Config
         `CONFIG_S3_URI` (overridden by `--config-s3`)
 
-    Remote Debugging (when `--debug` or `--create-app` with a debug VPC)
-        `DEBUG_HOST` : Bastion private IP (terraform output `DEBUG_HOST`).
-        `DEBUG_PORT` : Tunnel port (default: `3535`).
-        `DEBUGGER` : `pydevd` (PyCharm) or `debugpy` (VS Code).
-        `DEBUG_SUBNET_IDS` : Comma-separated private subnet IDs for the app.
-        `DEBUG_EMR_SECURITY_GROUP_ID` : Worker security group ID.
-
-    EMR Studio (when `--create-app`)
+    Interactive Endpoints (when `--create-app`)
+        `SPARK_CONNECT_ENABLED` : Set to `true` to enable Spark Connect
+        sessions on the application (see the Spark Connect guide).
         `EMR_STUDIO_ENABLED` : Set to `true` to enable interactive
         endpoints so the application can run notebooks from EMR Studio.
 
@@ -263,24 +245,16 @@ def deploy(
         region = os.environ["REGION"]
         app_name = os.environ["APP_NAME"]
         release_label = os.environ["RELEASE_LABEL"]
-        debug_subnet_ids = [
-            s.strip() for s in os.getenv("DEBUG_SUBNET_IDS", "").split(",") if s.strip()
-        ]
-        debug_sg_id = os.getenv("DEBUG_EMR_SECURITY_GROUP_ID", "").strip()
-        studio_enabled = os.getenv("EMR_STUDIO_ENABLED", "").lower() in (
-            "1",
-            "true",
-            "yes",
-            "on",
-        )
+        truthy = ("1", "true", "yes", "on")
+        studio_enabled = os.getenv("EMR_STUDIO_ENABLED", "").lower() in truthy
+        session_enabled = os.getenv("SPARK_CONNECT_ENABLED", "").lower() in truthy
         app_id = create_or_update_emr_app(
             app_name,
             image_uri,
             release_label,
             region,
-            subnet_ids=debug_subnet_ids or None,
-            security_group_ids=[debug_sg_id] if debug_sg_id else None,
             studio_enabled=studio_enabled,
+            session_enabled=session_enabled,
         )
         with open(".emr_app_id", "w") as f:
             f.write(app_id)
@@ -338,29 +312,6 @@ def deploy(
                 "--conf",
                 f"spark.emr-serverless.driverEnv.CONFIG_S3_URI={config_s3}",
             ]
-
-        if debug:
-            validate_env_vars(["DEBUG_HOST"])
-            debug_host = os.environ["DEBUG_HOST"].strip()
-            debug_port = os.getenv("DEBUG_PORT", "3535").strip()
-            debugger = os.getenv("DEBUGGER", "pydevd").strip()
-            driver_env_conf += [
-                "--conf",
-                f"spark.emr-serverless.driverEnv.DEBUG_HOST={debug_host}",
-                "--conf",
-                f"spark.emr-serverless.driverEnv.DEBUG_PORT={debug_port}",
-                "--conf",
-                f"spark.emr-serverless.driverEnv.DEBUGGER={debugger}",
-                # Generous timeouts so executors survive driver breakpoints.
-                "--conf",
-                "spark.network.timeout=600s",
-                "--conf",
-                "spark.executor.heartbeatInterval=60s",
-            ]
-            logger.info(
-                f"Remote debugging enabled: driver will attach to "
-                f"{debug_host}:{debug_port} via {debugger}.",
-            )
 
         iceberg_keys = [
             "ICEBERG_CATALOG_NAME",
